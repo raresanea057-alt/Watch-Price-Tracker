@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kamasu Watch — price depth</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;500;700&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --abyss:#08131F;      /* dial black-blue */
+  --deep:#0F2438;       /* panel */
+  --deeper:#0B1B2B;     /* panel alt */
+  --steel:#7C8B9B;      /* bracelet grey */
+  --foam:#E6EDF4;       /* dial print */
+  --lume:#C6E86A;       /* C3 lume, used ONLY for target hit */
+  --burgundy:#8E2A3C;   /* the red Kamasu dial */
+  --rule:rgba(124,139,155,.22);
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{
+  background:
+    radial-gradient(120% 80% at 50% -10%, #14304a 0%, var(--abyss) 55%, #050C14 100%);
+  color:var(--foam);
+  font-family:'IBM Plex Sans',system-ui,sans-serif;
+  min-height:100vh;
+  padding:0 20px 80px;
+}
+
+/* ---- bezel header: minute markers like a dive bezel ---- */
+header{max-width:1080px;margin:0 auto;padding:38px 0 26px}
+.bezel{
+  height:14px;border-radius:2px;margin-bottom:26px;
+  background:repeating-linear-gradient(90deg,
+    var(--rule) 0 1px, transparent 1px 12px);
+  position:relative;
+}
+.bezel::after{ /* the pip at 12 o'clock */
+  content:"";position:absolute;left:0;top:-3px;width:3px;height:20px;
+  background:var(--lume);border-radius:1px;
+}
+h1{
+  font-family:'Oswald',sans-serif;font-weight:700;
+  font-size:clamp(30px,6vw,52px);letter-spacing:.06em;
+  text-transform:uppercase;margin:0;line-height:.98;
+}
+h1 em{font-style:normal;color:var(--steel);font-weight:300}
+.sub{
+  font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--steel);
+  margin-top:12px;letter-spacing:.04em;
+}
+.sub b{color:var(--foam);font-weight:600}
+
+/* ---- best price: the one loud thing ---- */
+.best{
+  max-width:1080px;margin:0 auto 40px;padding:26px 28px;
+  border:1px solid var(--rule);border-radius:3px;
+  background:linear-gradient(180deg,var(--deep),var(--deeper));
+  display:flex;flex-wrap:wrap;gap:20px;align-items:baseline;
+}
+.best .label{
+  font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--steel);width:100%;
+}
+.best .amount{
+  font-family:'Oswald',sans-serif;font-size:clamp(44px,10vw,76px);
+  font-weight:500;line-height:1;letter-spacing:.01em;
+}
+.best .amount span{font-size:.36em;color:var(--steel);margin-left:8px}
+.best .where{font-size:15px;color:var(--steel);flex:1}
+.best .where a{color:var(--foam);text-decoration:none;border-bottom:1px solid var(--steel)}
+.best .where a:hover{border-color:var(--lume);color:var(--lume)}
+
+/* ---- listing grid ---- */
+.grid{
+  max-width:1080px;margin:0 auto;
+  display:grid;gap:16px;
+  grid-template-columns:repeat(auto-fill,minmax(320px,1fr));
+}
+.card{
+  border:1px solid var(--rule);border-radius:3px;padding:18px 18px 12px;
+  background:var(--deeper);
+  display:flex;flex-direction:column;gap:12px;
+  opacity:0;transform:translateY(10px);
+  animation:rise .5s cubic-bezier(.2,.7,.3,1) forwards;
+}
+@keyframes rise{to{opacity:1;transform:none}}
+.card.hit{border-color:var(--lume);box-shadow:0 0 0 1px rgba(198,232,106,.25)}
+.card.broken{border-style:dashed;border-color:var(--burgundy)}
+
+.shop{font-family:'Oswald',sans-serif;font-size:19px;letter-spacing:.04em;
+  text-transform:uppercase;font-weight:500}
+.variant{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--steel);
+  letter-spacing:.03em;margin-top:2px}
+.row{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.price{font-family:'Oswald',sans-serif;font-size:34px;font-weight:500;line-height:1}
+.price span{font-size:.4em;color:var(--steel);margin-left:5px}
+.delta{font-family:'IBM Plex Mono',monospace;font-size:12px}
+.delta.down{color:var(--lume)}
+.delta.up{color:var(--burgundy)}
+.delta.flat{color:var(--steel)}
+
+.pill{
+  font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.1em;
+  text-transform:uppercase;padding:3px 8px;border:1px solid var(--rule);
+  border-radius:2px;color:var(--steel);
+}
+.pill.out{color:var(--burgundy);border-color:var(--burgundy)}
+.pill.guess{color:#D9A441;border-color:rgba(217,164,65,.5)}
+.tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:auto}
+.card a.visit{
+  font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.08em;
+  color:var(--steel);text-decoration:none;text-transform:uppercase;
+  border-top:1px solid var(--rule);padding-top:10px;margin-top:4px;
+}
+.card a.visit:hover{color:var(--lume)}
+
+/* ---- the signature: a dive-profile chart, cheap = deep ---- */
+.gauge{width:100%;height:74px;display:block}
+.gauge .target{stroke:var(--lume);stroke-width:1;stroke-dasharray:3 4;opacity:.65}
+.gauge .trace{fill:none;stroke:var(--foam);stroke-width:1.75;
+  stroke-linejoin:round;stroke-linecap:round}
+.gauge .fill{fill:rgba(124,139,155,.12)}
+.gauge .now{fill:var(--foam)}
+.gauge.hit .trace,.gauge.hit .now{stroke:var(--lume);fill:var(--lume)}
+.gauge .axis{font-family:'IBM Plex Mono',monospace;font-size:8px;fill:var(--steel)}
+.single{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--steel);
+  padding:26px 0;text-align:center;border:1px dashed var(--rule);border-radius:2px}
+
+.note{max-width:1080px;margin:34px auto 0;font-size:13px;color:var(--steel);
+  line-height:1.65;border-top:1px solid var(--rule);padding-top:18px}
+.note code{font-family:'IBM Plex Mono',monospace;color:var(--foam);font-size:12px}
+.empty{max-width:1080px;margin:60px auto;text-align:center;color:var(--steel)}
+@media (prefers-reduced-motion:reduce){
+  .card{animation:none;opacity:1;transform:none}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="bezel"></div>
+  <h1>Kamasu <em>watch</em></h1>
+  <p class="sub" id="status">Reading price_history.json…</p>
+</header>
+
+<section class="best" id="best" hidden>
+  <span class="label">Cheapest in stock, delivered to Romania</span>
+  <span class="amount" id="best-amount"></span>
+  <span class="where" id="best-where"></span>
+</section>
+
+<main class="grid" id="grid"></main>
+<p class="note" id="note" hidden></p>
+
+<script>
+const TICK = 24 * 3600 * 1000;
+
+const fmt = n => new Intl.NumberFormat('ro-RO').format(Math.round(n));
+
+/** Draw price history as a dive profile: lower price = deeper on the gauge. */
+function gauge(points, target, hit) {
+  const W = 300, H = 74, PAD = 10;
+  if (points.length < 2) {
+    return `<div class="single">one reading so far — the profile needs a second check</div>`;
+  }
+  const prices = points.map(p => p.price_ron);
+  // Include the target in the scale so its line is always on-screen —
+  // otherwise it clips away exactly when you've beaten it.
+  const lo = Math.min(...prices, target), hi = Math.max(...prices, target);
+  const span = (hi - lo) || 1;
+  // Depth axis: the cheaper it gets, the deeper it sinks. This also matches
+  // the way every price chart is read, so it needs no explaining.
+  const y = v => PAD + ((hi - v) / span) * (H - PAD * 2);
+  const x = i => PAD + (i / (points.length - 1)) * (W - PAD * 2);
+
+  const line = points.map((p, i) => `${x(i)},${y(p.price_ron)}`).join(' ');
+  const area = `${PAD},${H} ${line} ${W - PAD},${H}`;
+  const last = points[points.length - 1];
+
+  return `<svg class="gauge ${hit ? 'hit' : ''}" viewBox="0 0 ${W} ${H}"
+            role="img" aria-label="Price history, lower is cheaper">
+    <polygon class="fill" points="${area}"></polygon>
+    <line class="target" x1="${PAD}" y1="${y(target)}" x2="${W - PAD}" y2="${y(target)}"></line>
+    <text class="axis" x="${W - PAD}" y="${y(target) - 4}" text-anchor="end">target ${fmt(target)}</text>
+    <polyline class="trace" points="${line}"></polyline>
+    <circle class="now" cx="${x(points.length - 1)}" cy="${y(last.price_ron)}" r="3"></circle>
+  </svg>`;
+}
+
+function card(key, entries, target, i) {
+  const last = entries[entries.length - 1];
+  const [shop, variant] = key.split('|');
+
+  if (last.error) {
+    return `<article class="card broken" style="animation-delay:${i * 45}ms">
+      <div><div class="shop">${shop}</div><div class="variant">${variant}</div></div>
+      <div class="row"><span class="price">—</span></div>
+      <div class="tags"><span class="pill out">scraper broken</span></div>
+      <div class="variant">${last.error}</div>
+      <a class="visit" href="${last.url}" target="_blank" rel="noopener">Check by hand →</a>
+    </article>`;
+  }
+
+  const priced = entries.filter(e => e.price_ron);
+  const prev = priced[priced.length - 2];
+  const diff = prev ? last.price_ron - prev.price_ron : 0;
+  const hit = last.price_ron <= target && last.in_stock;
+
+  const delta = !prev
+    ? `<span class="delta flat">first reading</span>`
+    : diff === 0
+      ? `<span class="delta flat">no change</span>`
+      : `<span class="delta ${diff < 0 ? 'down' : 'up'}">${diff < 0 ? '▼' : '▲'} ${fmt(Math.abs(diff))} lei</span>`;
+
+  return `<article class="card ${hit ? 'hit' : ''}" style="animation-delay:${i * 45}ms">
+    <div><div class="shop">${shop}</div><div class="variant">${variant}</div></div>
+    <div class="row"><span class="price">${fmt(last.price_ron)}<span>lei</span></span>${delta}</div>
+    ${gauge(priced, target, hit)}
+    <div class="tags">
+      <span class="pill ${last.in_stock ? '' : 'out'}">${last.in_stock ? 'in stock' : 'out of stock'}</span>
+      ${last.method === 'text' ? `<span class="pill guess">price guessed from text</span>` : ``}
+      ${last.currency === 'EUR' ? `<span class="pill">converted from €${last.raw}</span>` : ``}
+    </div>
+    <a class="visit" href="${last.url}" target="_blank" rel="noopener">Open ${shop} →</a>
+  </article>`;
+}
+
+fetch('price_history.json', { cache: 'no-store' })
+  .then(r => { if (!r.ok) throw new Error(r.status); return r.json(); })
+  .then(data => {
+    const meta = data._meta || {};
+    const target = meta.target_ron || 1300;
+    delete data._meta;
+
+    const keys = Object.keys(data).filter(k => data[k].length);
+    if (!keys.length) {
+      document.getElementById('status').textContent =
+        'No readings yet. Run the tracker once to fill this in.';
+      return;
+    }
+
+    const checked = meta.checked_at ? new Date(meta.checked_at) : null;
+    const stale = checked && (Date.now() - checked) > 2 * TICK;
+    document.getElementById('status').innerHTML =
+      `<b>${keys.length}</b> listings · last checked <b>${checked ? checked.toLocaleString('ro-RO') : '—'}</b>` +
+      (stale ? ` · <span style="color:var(--burgundy)">stale, the job may have stopped</span>` : ``);
+
+    const live = keys
+      .map(k => data[k][data[k].length - 1])
+      .filter(e => e.price_ron && e.in_stock);
+
+    if (live.length) {
+      const best = live.reduce((a, b) => (a.price_ron <= b.price_ron ? a : b));
+      document.getElementById('best').hidden = false;
+      document.getElementById('best-amount').innerHTML = `${fmt(best.price_ron)}<span>lei</span>`;
+      document.getElementById('best-where').innerHTML =
+        `${best.variant} at <a href="${best.url}" target="_blank" rel="noopener">${best.shop}</a>`;
+    }
+
+    document.getElementById('grid').innerHTML =
+      keys.sort((a, b) => {
+        const pa = data[a].at(-1).price_ron || Infinity;
+        const pb = data[b].at(-1).price_ron || Infinity;
+        return pa - pb;
+      }).map((k, i) => card(k, data[k], target, i)).join('');
+
+    const note = document.getElementById('note');
+    note.hidden = false;
+    note.innerHTML =
+      `The dotted line is your target of ${fmt(target)} lei — set <code>TARGET_RON</code> in the script to move it. ` +
+      `Cards flagged <em>price guessed from text</em> were parsed without structured data, so check those before you buy. ` +
+      `Euro prices are converted at a fixed rate and are indicative only.`;
+  })
+  .catch(err => {
+    document.getElementById('status').innerHTML =
+      `Couldn't load <code>price_history.json</code> (${err.message}). ` +
+      `Run <code>python3 kamasu_tracker.py</code> first, then reload.`;
+  });
+</script>
+</body>
+</html>

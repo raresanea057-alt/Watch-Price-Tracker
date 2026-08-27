@@ -1,0 +1,67 @@
+name: Track Kamasu prices
+
+on:
+  schedule:
+    # 07:10 and 19:10 UTC. Avoid :00 — GitHub's cron is busiest on the hour
+    # and delays runs. Twice a day is plenty for watch prices.
+    - cron: "10 7,19 * * *"
+  workflow_dispatch:        # lets you run it by hand from the Actions tab
+
+permissions:
+  contents: write           # needed to commit the updated history
+  pages: write
+  id-token: write
+
+concurrency:
+  group: kamasu-tracker
+  cancel-in-progress: false
+
+jobs:
+  track:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - run: pip install requests beautifulsoup4
+
+      # The script exits 1 when it finds a drop, restock or broken scraper.
+      # That's information, not failure — capture it, don't let it kill the run.
+      - name: Check prices
+        id: check
+        run: |
+          set +e
+          python3 kamasu_tracker.py | tee report.txt
+          echo "alerts=$?" >> "$GITHUB_OUTPUT"
+
+      - name: Commit history
+        run: |
+          git config user.name  "kamasu-tracker"
+          git config user.email "actions@github.com"
+          git add price_history.json
+          git diff --staged --quiet || git commit -m "prices: $(date -u +%F\ %H:%M)"
+          git push
+
+      # Surfaces the alert text on the Actions run summary page, and
+      # GitHub emails you when a scheduled job's step fails.
+      - name: Report
+        if: steps.check.outputs.alerts == '1'
+        run: |
+          {
+            echo "## Kamasu price alert"
+            echo '```'
+            cat report.txt
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Publish site
+        run: |
+          mkdir -p _site
+          cp index.html price_history.json _site/
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+      - uses: actions/deploy-pages@v4
