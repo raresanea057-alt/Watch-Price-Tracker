@@ -505,6 +505,17 @@
       "url": "https://www.timestore.ro/ceasuri-barbati-orient-contemporary-ra-aa0003r39b",
       "shop": "timestore.ro",
       "variant": "red RA-AA0003R39B"
+    },
+    {
+      "at": "2026-09-19T21:26:54+00:00",
+      "price_ron": 1338.0,
+      "in_stock": false,
+      "raw": 1338.0,
+      "currency": "RON",
+      "method": "json-ld",
+      "url": "https://www.timestore.ro/ceasuri-barbati-orient-contemporary-ra-aa0003r39b",
+      "shop": "timestore.ro",
+      "variant": "red RA-AA0003R39B"
     }
   ],
   "timestore.ro|blue RA-AA0002L39B": [
@@ -1005,6 +1016,17 @@
     },
     {
       "at": "2026-09-19T11:54:25+00:00",
+      "price_ron": 1438.0,
+      "in_stock": true,
+      "raw": 1438.0,
+      "currency": "RON",
+      "method": "json-ld",
+      "url": "https://www.timestore.ro/ceasuri-barbati-orient-kamasu-ra-aa0002l39b",
+      "shop": "timestore.ro",
+      "variant": "blue RA-AA0002L39B"
+    },
+    {
+      "at": "2026-09-19T21:26:54+00:00",
       "price_ron": 1438.0,
       "in_stock": true,
       "raw": 1438.0,
@@ -1521,6 +1543,17 @@
       "url": "https://www.timestore.ro/ceasuri-barbati-orient-kamasu-ra-aa0821s39b",
       "shop": "timestore.ro",
       "variant": "RA-AA0821S39B"
+    },
+    {
+      "at": "2026-09-19T21:26:54+00:00",
+      "price_ron": 1446.0,
+      "in_stock": true,
+      "raw": 1446.0,
+      "currency": "RON",
+      "method": "json-ld",
+      "url": "https://www.timestore.ro/ceasuri-barbati-orient-kamasu-ra-aa0821s39b",
+      "shop": "timestore.ro",
+      "variant": "RA-AA0821S39B"
     }
   ],
   "istimo.ro|blue RA-AA0002L39B": [
@@ -1841,6 +1874,13 @@
     },
     {
       "at": "2026-09-19T11:54:25+00:00",
+      "error": "fetch failed: HTTPError",
+      "url": "https://www.istimo.ro/p/orient-kamasu-ra-aa0002l39b",
+      "shop": "istimo.ro",
+      "variant": "blue RA-AA0002L39B"
+    },
+    {
+      "at": "2026-09-19T21:26:54+00:00",
       "error": "fetch failed: HTTPError",
       "url": "https://www.istimo.ro/p/orient-kamasu-ra-aa0002l39b",
       "shop": "istimo.ro",
@@ -2345,6 +2385,17 @@
     },
     {
       "at": "2026-09-19T11:54:25+00:00",
+      "price_ron": 2119.0,
+      "in_stock": false,
+      "raw": 2119.0,
+      "currency": "RON",
+      "method": "json-ld",
+      "url": "https://eceasuri.ro/ceas-barbatesc-orient-kamasu-automatic-ra-aa0003r19b",
+      "shop": "eceasuri.ro",
+      "variant": "red RA-AA0003R19B"
+    },
+    {
+      "at": "2026-09-19T21:26:54+00:00",
       "price_ron": 2119.0,
       "in_stock": false,
       "raw": 2119.0,
@@ -2861,6 +2912,17 @@
       "url": "https://www.helveti.ro/orient-kamasu-ra-aa0003r",
       "shop": "helveti.ro",
       "variant": "red RA-AA0003R"
+    },
+    {
+      "at": "2026-09-19T21:26:54+00:00",
+      "price_ron": 11982,
+      "in_stock": true,
+      "raw": 2358.67,
+      "currency": "EUR",
+      "method": "json-ld",
+      "url": "https://www.helveti.ro/orient-kamasu-ra-aa0003r",
+      "shop": "helveti.ro",
+      "variant": "red RA-AA0003R"
     }
   ],
   "helveti.ro|blue RA-AA0002L": [
@@ -3361,6 +3423,17 @@
     },
     {
       "at": "2026-09-19T11:54:25+00:00",
+      "price_ron": 11982,
+      "in_stock": true,
+      "raw": 2358.67,
+      "currency": "EUR",
+      "method": "json-ld",
+      "url": "https://www.helveti.ro/orient-kamasu-ra-aa0002l",
+      "shop": "helveti.ro",
+      "variant": "blue RA-AA0002L"
+    },
+    {
+      "at": "2026-09-19T21:26:54+00:00",
       "price_ron": 11982,
       "in_stock": true,
       "raw": 2358.67,
@@ -3877,10 +3950,21 @@
       "url": "https://www.kulta-center.com/en/orient-kamasu-watch-ra-aa0002l19b",
       "shop": "kulta-center.com",
       "variant": "blue RA-AA0002L19B"
+    },
+    {
+      "at": "2026-09-19T21:26:54+00:00",
+      "price_ron": 1265,
+      "in_stock": false,
+      "raw": 249.0,
+      "currency": "EUR",
+      "method": "json-ld",
+      "url": "https://www.kulta-center.com/en/orient-kamasu-watch-ra-aa0002l19b",
+      "shop": "kulta-center.com",
+      "variant": "blue RA-AA0002L19B"
     }
   ],
   "_meta": {
     "target_ron": 1300,
-    "checked_at": "2026-09-19T11:54:25+00:00"
+    "checked_at": "2026-09-19T21:26:54+00:00"
   }
 }
